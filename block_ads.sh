@@ -45,7 +45,15 @@ total_lists=$((total_lines / MAX_LIST_SIZE))
 current_lists=$(curl -sSfL --retry "$MAX_RETRIES" --retry-all-errors -X GET "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/gateway/lists?per_page=500" \
     -H "Authorization: Bearer ${API_TOKEN}" \
     -H "Content-Type: application/json") || error "Failed to get current lists from Cloudflare"
-    
+
+# Add these lines right after the current_lists curl call:
+echo "--- DEBUG INFO ---"
+echo "API response received."
+echo "Number of lists returned: $(echo "${current_lists}" | jq '.result | length')"
+echo "Lists matching '${PREFIX}':"
+echo "${current_lists}" | jq -r --arg PREFIX "${PREFIX}" '.result | map(select(.name | contains($PREFIX))) | .[].name'
+echo "------------------"
+
 # Get current policies from Cloudflare
 current_policies=$(curl -sSfL --retry "$MAX_RETRIES" --retry-all-errors -X GET "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/gateway/rules" \
     -H "Authorization: Bearer ${API_TOKEN}" \
