@@ -84,7 +84,16 @@ used_list_ids=()
 excess_list_ids=()
 
 # Create list counter
-list_counter=1
+# Find the maximum index currently in use to avoid conflicts
+max_existing_index=$(echo "${current_lists}" | jq -r --arg PREFIX "${PREFIX}" '.result | map(select(.name | contains($PREFIX))) | .[].name' | sed 's/.*- //' | sort -n | tail -1)
+
+# If no lists exist, start at 1, otherwise start at max + 1
+if [ -z "$max_existing_index" ]; then
+    list_counter=1
+else
+    list_counter=$((10#$max_existing_index + 1))
+fi
+
 
 # Update existing lists
 if [[ ${current_lists_count} -gt 0 ]]; then
