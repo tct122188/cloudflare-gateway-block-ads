@@ -10899,7 +10899,6 @@ cdn.adsninja.ca
 cdn.adspmg.com
 cdn.advertiser.linkvertise.com
 cdn.advg.agency
-cdn.adxcontent.com
 cdn.affiliatable.io
 cdn.afwpc.com
 cdn.ajo77.com
